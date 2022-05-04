@@ -43,11 +43,31 @@ class ContactController extends Controller
         return response()->json(["success"=>"contact created",200]);
     }
 
-    public function updateContact(Request $request, $id){
-        return 'Patch by id: '.$id;
+    public function updateContact(Request $request, $id)
+    {
+        $contact = Contact::where('id', $id)->where('id_user', 4)->first();
+
+        if (empty($contact)){
+            return response ()-> json(["error"=> "contact not exists",404]);
+        }
+
+        if(isset($request->name)){
+            $contact->name = $request->name;
+        }
+        if(isset($request->surname)){
+            $contact->surname = $request->surname;
+        }
+        if(isset($request->email)){
+            $contact->email = $request->email;
+        }
+        if(isset($request->phone_number)){
+            $contact->phone_number = $request->phone_number;
+        }
+        $contact->save();
+        return response()->json(["data"=>$contact,200]);
     }
 
     public function deleteContact($id){
-        return 'Delete by id: '.$id;
+        
     }
 }
