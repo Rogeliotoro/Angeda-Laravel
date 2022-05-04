@@ -67,7 +67,14 @@ class ContactController extends Controller
         return response()->json(["data"=>$contact,200]);
     }
 
-    public function deleteContact($id){
-        
+    public function deleteContact($id)
+    {
+        $contact = Contact::where('id', $id)->where('id_user', 1)->first();
+
+        if (empty($contact)){
+            return response ()-> json(["error"=> "contact not exists",404]);
+        }
+        $contact->delete();
+        return 'Delete by id: '.$id;
     }
 }
