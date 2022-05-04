@@ -26,12 +26,21 @@ class ContactController extends Controller
         if (empty($contacts)){
             return response()->json(["sucess"=>"contact no exits"], 404);
         }
-
     }
 
-    public function createContact(Request $request){
-        $name = $request->input('name');
-        return 'Contact name is '.$name;
+    public function createContact(Request $request)
+    {
+
+        $newContact = new Contact();
+        $newContact->name = $request->name;
+        $newContact->surname = $request->surname;
+        $newContact->email = $request->email;
+        $newContact->phone_number = $request->phone_number;
+        $newContact->id_user = $request->id_user;
+
+        $newContact->save();
+
+        return response()->json(["success"=>"contact created",200]);
     }
 
     public function updateContact(Request $request, $id){
