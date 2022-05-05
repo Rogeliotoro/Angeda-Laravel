@@ -22,7 +22,7 @@ Route::group([
     'middleware' => 'jwt.auth'
 ], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [AuthController::class, 'me']);
+    Route::get('/profile', [AuthController::class, 'profile']);
 });
 //contacts
 Route::get('/contacts', [ContactController::class, 'getAllContacts']);
