@@ -31,9 +31,16 @@ class ContactController extends Controller
 
     public function getContactById($id)
     {
-        $contacts = Contact::where('id', $id)->where('id_user', 1)->first();
-        if (empty($contacts)) {
-            return response()->json(["sucess" => "contact no exits"], 404);
+        try {
+            Log::info('init get all contacts');
+            $contacts = Contact::where('id', $id)->where('id_user', 4)->first();
+            if (empty($contacts)) {
+                return response()->json(["sucess" => "contact no exits"], 404);
+            }
+            return response()->json($contacts, 200);
+        } catch (\Throwable $th) {
+            Log::error('ha ocurrido un error->' . $th->getMessage());
+            return response()->json(["error" => "upps"], 500);
         }
     }
 
@@ -50,16 +57,18 @@ class ContactController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $newContact = new Contact();
-        $newContact->name = $request->name;
-        $newContact->surname = $request->surname;
-        $newContact->email = $request->email;
-        $newContact->phone_number = $request->phone_number;
-        $newContact->id_user = $request->id_user;
+        //$newContact = new Contact();
+        //$newContact->name = $request->name;
+        //$newContact->surname = $request->surname;
+        //$newContact->email = $request->email;
+        //$newContact->phone_number = $request->phone_number;
+        //$newContact->id_user = $request->id_user;
 
-        $newContact->save();
+        //$newContact->save();
+        $contact=$request->all();
+        $newContact= Contact::create($contact);
 
-        return response()->json(["success" => "contact created", 200]);
+        return response()->json(["success" => $newContact, 200]);
     }
 
     public function updateContact(Request $request, $id)
